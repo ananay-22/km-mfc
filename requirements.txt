@@ -1,0 +1,9 @@
+# For development, you can install dependencies using:
+# pip install -r requirements.txt
+#
+# This file is the single source of truth for package dependencies.
+# It is read by setuptools during installation via the configuration in pyproject.toml.
+rich>=13.0.0
+smbus2>=0.4.0
+spidev>=3.5
+pyserial>=3.5

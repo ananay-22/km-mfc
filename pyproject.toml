@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "km-mfc"
+version = "0.1.0"
+authors = [
+  { name="Nana Gupta", email="ananay@gatech.edu" },
+]
+description = "Microbial Fuel Cell firmware management package - developed by Ka Moamoa Lab at Georgia Tech."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dynamic = ["dependencies"]
+
+[project.urls]
+"Homepage" = "https://github.com/ananay-22/km-mfc"
+"Bug Tracker" = "https://github.com/ananay-22/km-mfc/issues"
+
+[project.scripts]
+km-mfc-cli = "km_mfc.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
