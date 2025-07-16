@@ -62,7 +62,6 @@ class PCBSensor(BaseSensor):
                 voltage_data = self.read_adc_channel(adc_channel, 1)
                 current_data = self.read_adc_channel(adc_channel, 0)
                 
-                
                 voltage_data2 = self.read_adc_channel(adc_channel, 3)
                 current_data2 = self.read_adc_channel(adc_channel, 2)
                 
