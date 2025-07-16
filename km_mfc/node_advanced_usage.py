@@ -4,11 +4,11 @@ import logging
 import queue
 import time
 import json
-from sensor_system.config import HardwareConfig, DigitalPotChannel
-from sensor_system.sensors import PCBSensor, TerosArduinoSensor
-from sensor_system.adapters import LoggingAdapter, QueueAdapter
-from sensor_system.management import SensorManager
-from sensor_system.utils import get_current_serial_device
+from node.config import HardwareConfig, DigitalPotChannel
+from node.sensors import PCBSensor, TerosArduinoSensor
+from node.adapters import LoggingAdapter, QueueAdapter
+from node.management import SensorManager
+from node.utils import get_current_serial_device
 
 def data_processor(data_queue: queue.Queue):
     """Process sensor data from queue"""
