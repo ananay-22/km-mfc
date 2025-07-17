@@ -1,5 +1,5 @@
 """Management module."""
 
-from .sensor_manager import SensorManager
+from .sensor_management import SensorManager
 
 __all__ = ['SensorManager']
