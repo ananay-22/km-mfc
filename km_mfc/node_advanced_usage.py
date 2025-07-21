@@ -66,7 +66,8 @@ def main():
         
         # Start all sensors
         manager.start_all()
-        
+
+        """
         # Example: Set different resistances over time
         resistances = [10000, 25000, 50000, 75000, 100000]  # Different resistance values
         
@@ -78,7 +79,8 @@ def main():
         # Continue running
         while True:
             time.sleep(1)
-            
+        """      
+        
     except KeyboardInterrupt:
         print("Shutting down...")
     finally:
