@@ -1,4 +1,4 @@
-"""Advanced usage example with data processing."""
+"""Used for experiments to see if pcb current data is accurate"""
 
 import logging
 import queue
@@ -67,7 +67,7 @@ def main():
         # Start all sensors
         manager.start_all()
 
-        # Example: Set different resistances over time
+        # Example: Set resistance
         resistance = 25000
         
 
