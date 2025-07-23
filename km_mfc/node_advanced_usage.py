@@ -68,8 +68,7 @@ def main():
         manager.start_all()
 
         # Example: Set different resistances over time
-        #resistances = [10000, 25000, 50000, 75000, 100000]  # Different resistance values
-        resistances = [25000,]
+        resistances = [10000, 25000, 50000, 75000, 100000]  # Different resistance values
         
         for i, resistance in enumerate(resistances):
             pcb_sensor.set_resistance(DigitalPotChannel.AD0, resistance)
