@@ -26,7 +26,7 @@ class PCBSensor(BaseSensor):
             self.logger.error(f"Failed to set resistance: {e}")
             raise
     
-    def read_adc_channel(self, adc_channel: ADCChannel, channel_num: int) -> Optional[Dict[str, Any]]:
+    def read_adc_channel(self, adc_channel: ADCChannel, channel_num: int, isCurrent: bool) -> Optional[Dict[str, Any]]:
         """Read specific ADC channel"""
         try:
             cs_pin = adc_channel.value
@@ -34,16 +34,27 @@ class PCBSensor(BaseSensor):
             
             if raw_data is None:
                 return None
-            
-            voltage = self.adc_driver.raw_to_voltage(raw_data, vref=5.3)  # Custom VREF
-            raw_int = int.from_bytes(raw_data, byteorder='big')
-            
-            return {
-                'voltage': voltage,
-                'raw_value': raw_int,
-                'channel': channel_num,
-                'adc': adc_channel.name
-            }
+
+            if not isCurrent:
+                voltage = self.adc_driver.raw_to_voltage(raw_data, vref=5.3)  # Custom VREF
+                raw_int = int.from_bytes(raw_data, byteorder='big')
+                
+                return {
+                    'voltage': voltage,
+                    'raw_value': raw_int,
+                    'channel': channel_num,
+                    'adc': adc_channel.name
+                }
+            else:
+                current = self.adc_driver.raw_to_voltage(raw_data, vref=5.3)  # Custom VREF
+                raw_int = int.from_bytes(raw_data, byteorder='big')
+                
+                return {
+                    'current': current,
+                    'raw_value': raw_int,
+                    'channel': channel_num,
+                    'adc': adc_channel.name
+                }
         except Exception as e:
             self.logger.error(f"ADC read error: {e}")
             return None
@@ -59,11 +70,11 @@ class PCBSensor(BaseSensor):
                 adc_data = {}
                 
                 # Read voltage (channel 1) and current (channel 0)
-                voltage_data = self.read_adc_channel(adc_channel, 1)
-                current_data = self.read_adc_channel(adc_channel, 0)
+                voltage_data = self.read_adc_channel(adc_channel, 1, isCurrent=False)
+                current_data = self.read_adc_channel(adc_channel, 0, isCurrent=True)
                 
-                voltage_data2 = self.read_adc_channel(adc_channel, 3)
-                current_data2 = self.read_adc_channel(adc_channel, 2)
+                voltage_data2 = self.read_adc_channel(adc_channel, 3, isCurrent=False)
+                current_data2 = self.read_adc_channel(adc_channel, 2, isCurrent=True)
                 
                 if voltage_data:
                     adc_data['voltage 1'] = voltage_data
