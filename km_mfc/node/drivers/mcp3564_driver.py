@@ -116,6 +116,25 @@ class MCP3564Driver(BaseDriver):
             value -= 0x1000000
         
         return vref * (value / 8388608) / gain
+
+    def raw_to_current(self, raw_data: bytes, gain: float = 1.0, full_scale_current: float = 1.0, vref: Optional[float] = None) -> float:
+   """Convert raw ADC data to current, scaled to full-scale current"""
+        if vref is None:
+           vref = self.config.mcp3564_vref
+        
+        
+        # Convert 24-bit two's complement
+        value = int.from_bytes(raw_data, byteorder='big', signed=False)
+        if value & 0x800000:
+           value -= 0x1000000
+        
+        
+        # ADC full-scale value is ±2^23 = ±8388608
+        # Assume full_scale_current corresponds to ±full-scale input
+        current = (value / 8388608) * full_scale_current / gain
+        
+        
+        return current
     
     def close(self):
         """Clean up resources"""
