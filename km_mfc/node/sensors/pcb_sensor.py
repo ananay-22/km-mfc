@@ -46,7 +46,7 @@ class PCBSensor(BaseSensor):
                     'adc': adc_channel.name
                 }
             else:
-                current = self.adc_driver.raw_to_voltage(raw_data, vref=5.3)  # Custom VREF
+                current = self.adc_driver.raw_to_current(raw_data)  # Custom VREF
                 raw_int = int.from_bytes(raw_data, byteorder='big')
                 
                 return {
