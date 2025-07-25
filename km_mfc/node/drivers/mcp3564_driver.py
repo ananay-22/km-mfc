@@ -118,7 +118,7 @@ class MCP3564Driver(BaseDriver):
         return vref * (value / 8388608) / gain
 
     def raw_to_current(self, raw_data: bytes, gain: float = 1.0, full_scale_current: float = 1.0, vref: Optional[float] = None) -> float:
-   """Convert raw ADC data to current, scaled to full-scale current"""
+        """Convert raw ADC data to current, scaled to full-scale current"""
         if vref is None:
            vref = self.config.mcp3564_vref
         
