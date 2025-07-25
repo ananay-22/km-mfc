@@ -132,7 +132,7 @@ class MCP3564Driver(BaseDriver):
         
         # ADC full-scale value is ±2^23 = ±8388608
         # Assume full_scale_current corresponds to ±full-scale input
-        current = (value / 8388608) * full_scale_current / gain
+        current = (value / 8388608) * full_scale_current * 1000 / gain
         
         
         return current
