@@ -36,7 +36,7 @@ class PCBSensor(BaseSensor):
                 return None
 
             if not isCurrent:
-                voltage = self.adc_driver.raw_to_voltage(raw_data, vref=5.3)  # Custom VREF
+                voltage = self.adc_driver.raw_to_voltage(raw_data, vref=5.0)  # Custom VREF
                 raw_int = int.from_bytes(raw_data, byteorder='big')
                 
                 return {
