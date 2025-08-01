@@ -59,7 +59,7 @@ def main():
     
     # Add sensors with multiple adapters
     manager.add_sensor(pcb_sensor, interval=0.5, adapters=[logger_adapter, queue_adapter])
-    manager.add_sensor(arduino_sensor, interval=1.0, adapters=[logger_adapter])
+    manager.add_sensor(arduino_sensor, interval=1.0, adapters=[logger_adapter, queue_adapter])
     
     try:
         # Start data processor in separate thread
