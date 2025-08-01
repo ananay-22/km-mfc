@@ -20,7 +20,7 @@ def data_processor(data_queue: queue.Queue):
             # Process the reading (e.g., save to database, send to cloud, etc.)
             print(f"Processing: {reading.sensor_name} at {reading.timestamp}")
 
-            output_dir = "/home/pi/sensor_logs"
+            output_dir = "logs"
             os.makedirs(output_dir, exist_ok=True)
 
             filename = os.path.join(output_dir, f"sensor_data_{reading.sensor_name}.json")
