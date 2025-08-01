@@ -60,8 +60,8 @@ def main():
     manager = SensorManager()
 
     # Add sensors with multiple adapters
-    manager.add_sensor(pcb_sensor, interval=1.0, adapters=[logger_adapter, queue_adapter])
-    manager.add_sensor(arduino_sensor, interval=1.0, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(pcb_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(arduino_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
 
     try:
         # Start data processor in separate thread
@@ -74,7 +74,7 @@ def main():
         manager.start_all()
 
         # Example: Set resistance
-        resistance = int(input("Resistance (in Ohms): "))
+        resistance = 4900
 
         pcb_sensor.set_resistance(DigitalPotChannel.AD0, resistance)
         print(f"Set resistance to {resistance}Ω")
