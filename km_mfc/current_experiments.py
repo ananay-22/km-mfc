@@ -1,5 +1,6 @@
 """Used for experiments to see if pcb current data is accurate"""
 
+import os
 import logging
 import queue
 import time
@@ -18,9 +19,12 @@ def data_processor(data_queue: queue.Queue):
             
             # Process the reading (e.g., save to database, send to cloud, etc.)
             print(f"Processing: {reading.sensor_name} at {reading.timestamp}")
-            
-            # Example processing - save to file
-            with open(f"sensor_data_{reading.sensor_name}.json", "a") as f:
+
+            output_dir = "/home/pi/sensor_logs"
+            os.makedirs(output_dir, exist_ok=True)
+
+            filename = os.path.join(output_dir, f"sensor_data_{reading.sensor_name}.json")
+            with open(filename, "a") as f:
                 json.dump(reading.to_dict(), f)
                 f.write('\n')
                 
