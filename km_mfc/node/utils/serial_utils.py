@@ -8,7 +8,7 @@ def find_arduino_port() -> Optional[str]:
     ports = serial.tools.list_ports.comports()
     
     for port in ports:
-        if 'Arduino' in port.description or 'USB' in port.description:
+        if 'Arduino' in port.description or 'USB' in port.description or 'ACM' in port.description:
             return port.device
     
     return None
