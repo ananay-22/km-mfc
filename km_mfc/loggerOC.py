@@ -78,7 +78,7 @@ def main():
 
         # Now safely toggle GPIO pins
         GPIO.setmode(GPIO.BCM)
-        gpio_pins = [23, 24, 25, 5]  # Change to your actual pins
+        gpio_pins = [23, 24, 25, 5]
 
         for pin in gpio_pins:
             GPIO.setup(pin, GPIO.OUT)
@@ -99,4 +99,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
