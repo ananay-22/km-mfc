@@ -53,7 +53,7 @@ def data_processor(data_queue: queue.Queue):
             output_dir = "logs"
             os.makedirs(output_dir, exist_ok=True)
 
-            filename = os.path.join(output_dir, f"KMM1_ERP_10s.json")
+            filename = os.path.join(output_dir, f"ERP_10s_{reading.sensor_name}_data.json")
             with open(filename, "a") as f:
                 json.dump(reading_dict, f)
                 f.write('\n')
