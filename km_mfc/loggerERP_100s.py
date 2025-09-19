@@ -18,7 +18,7 @@ the two time interval constants below"""
 # CIRCUIT CONTROLS
 OPEN_CIRCUIT_INTERVAL = 100  # seconds
 CLOSED_CIRCUIT_INTERVAL = 100  # seconds
-iterations = 20  # number of open/closed cycles
+ITERATIONS = 20  # number of open/closed cycles
 current_mode = "open"  # Tracks the current mode for tagging
 
 def set_open_circuit(gpio_pins):
@@ -86,7 +86,7 @@ def main():
     # Initialize sensor manager and add sensors
     manager = SensorManager()
     manager.add_sensor(pcb_sensor, interval=.1, adapters=[logger_adapter, queue_adapter])
-    manager.add_sensor(arduino_sensor, interval=.1, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(arduino_sensor, interval=300, adapters=[logger_adapter, queue_adapter])
 
     try:
         # Start data processor thread
