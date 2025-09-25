@@ -38,12 +38,6 @@ def main():
     manager.add_sensor(arduino_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
 
     try:
-        # Start data processor thread
-        from threading import Thread
-        processor_thread = Thread(target=data_processor, args=(data_queue,))
-        processor_thread.daemon = True
-        processor_thread.start()
-
         # Start all sensors
         manager.start_all()
 
