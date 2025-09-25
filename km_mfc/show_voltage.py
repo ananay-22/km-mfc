@@ -12,6 +12,23 @@ from node.adapters import LoggingAdapter, QueueAdapter
 from node.management import SensorManager
 from node.utils import get_current_serial_device
 
+
+def data_processor(data_queue: queue.Queue):
+    """Process sensor data from queue"""
+    while True:
+        try:
+            reading = data_queue.get(timeout=1.0)
+
+            # Process the reading (e.g., save to database, send to cloud, etc.)
+            print(f"Processing: {reading.sensor_name} at {reading.timestamp}")
+
+
+        except queue.Empty:
+            continue
+        except Exception as e:
+            print(f"Data processing error: {e}")
+
+
 def main():
 
     # Configure logging
@@ -38,11 +55,17 @@ def main():
     manager.add_sensor(arduino_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
 
     try:
+        # Start data processor thread
+        from threading import Thread
+        processor_thread = Thread(target=data_processor, args=(data_queue,))
+        processor_thread.daemon = True
+        processor_thread.start()
+
         # Start all sensors
         manager.start_all()
 
         # Set resistance BEFORE touching GPIO
-        resistance = 4900
+        resistance = 24900
         pcb_sensor.set_resistance(DigitalPotChannel.AD0, resistance)
         print(f"Set resistance to {resistance}Ω")
 
@@ -66,6 +89,11 @@ def main():
         manager.cleanup()
         GPIO.cleanup()
 
+
+
+if __name__ == "__main__":
+
+    main()
 
 
 if __name__ == "__main__":
