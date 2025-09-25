@@ -1,11 +1,16 @@
+"""Used for experiments to see if pcb current data is accurate"""
+
+import os
 import logging
+import queue
 import time
+import json
 import RPi.GPIO as GPIO
 from node.config import HardwareConfig, DigitalPotChannel
 from node.sensors import PCBSensor, TerosArduinoSensor
+from node.adapters import LoggingAdapter, QueueAdapter
 from node.management import SensorManager
 from node.utils import get_current_serial_device
-
 
 def main():
 
@@ -18,23 +23,34 @@ def main():
     # Create configuration
     config = HardwareConfig()
 
+    # Create data queue and adapters
+    data_queue = queue.Queue(maxsize=1000)
+    logger_adapter = LoggingAdapter()
+    queue_adapter = QueueAdapter(data_queue)
+
     # Initialize sensors
     pcb_sensor = PCBSensor("pcb_main", config)
     arduino_sensor = TerosArduinoSensor("teros_main", config, get_current_serial_device)
 
     # Initialize sensor manager and add sensors
     manager = SensorManager()
-    manager.add_sensor(pcb_sensor, interval=300.0, adapters=[])
-    manager.add_sensor(arduino_sensor, interval=300.0, adapters=[])
+    manager.add_sensor(pcb_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(arduino_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
 
     try:
+        # Start data processor thread
+        from threading import Thread
+        processor_thread = Thread(target=data_processor, args=(data_queue,))
+        processor_thread.daemon = True
+        processor_thread.start()
+
         # Start all sensors
         manager.start_all()
 
         # Set resistance BEFORE touching GPIO
-        resistance = 24900
+        resistance = 4900
         pcb_sensor.set_resistance(DigitalPotChannel.AD0, resistance)
-        print(f"Set resistance to {resistance}Ω (open circuit)")
+        print(f"Set resistance to {resistance}Ω")
 
         # Now safely toggle GPIO pins
         GPIO.setmode(GPIO.BCM)
@@ -45,9 +61,9 @@ def main():
             GPIO.output(pin, GPIO.LOW)
             print(f"GPIO {pin} set to LOW")
 
-        # --- Show one snapshot of PCB data ---
-        reading = pcb_sensor.read()
-        print(f"Voltage: {reading.voltage:.3f} V | Current: {reading.current:.6f} A")
+        # Keep running
+        while False:
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print("Shutting down...")
@@ -55,6 +71,7 @@ def main():
     finally:
         manager.cleanup()
         GPIO.cleanup()
+
 
 
 if __name__ == "__main__":
