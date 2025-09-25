@@ -53,8 +53,8 @@ def main():
 
     # Initialize sensor manager and add sensors
     manager = SensorManager()
-    manager.add_sensor(pcb_sensor, interval=.1, adapters=[logger_adapter, queue_adapter])
-    manager.add_sensor(arduino_sensor, interval=.1, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(pcb_sensor, interval=1, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(arduino_sensor, interval=1, adapters=[logger_adapter, queue_adapter])
 
     try:
         # Start data processor thread
