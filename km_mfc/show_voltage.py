@@ -1,10 +1,8 @@
 """Used for experiments to see if pcb current data is accurate"""
 
-import os
 import logging
 import queue
 import time
-import json
 import RPi.GPIO as GPIO
 from node.config import HardwareConfig, DigitalPotChannel
 from node.sensors import PCBSensor, TerosArduinoSensor
@@ -14,19 +12,23 @@ from node.utils import get_current_serial_device
 
 
 def data_processor(data_queue: queue.Queue):
-    """Process sensor data from queue"""
-    while True:
+    """Process sensor data from queue (print once instead of saving)"""
+    running = True
+    while running:
         try:
             reading = data_queue.get(timeout=1.0)
 
-            # Process the reading (e.g., save to database, send to cloud, etc.)
-            print(f"Processing: {reading.sensor_name} at {reading.timestamp}")
+            # Just print the reading instead of saving
+            print("Sensor reading:", reading.to_dict())
 
+            # Stop after first print
+            running = False
 
         except queue.Empty:
             continue
         except Exception as e:
             print(f"Data processing error: {e}")
+            running = False
 
 
 def main():
@@ -51,8 +53,8 @@ def main():
 
     # Initialize sensor manager and add sensors
     manager = SensorManager()
-    manager.add_sensor(pcb_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
-    manager.add_sensor(arduino_sensor, interval=300.0, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(pcb_sensor, interval=.1, adapters=[logger_adapter, queue_adapter])
+    manager.add_sensor(arduino_sensor, interval=.1, adapters=[logger_adapter, queue_adapter])
 
     try:
         # Start data processor thread
@@ -78,9 +80,9 @@ def main():
             GPIO.output(pin, GPIO.LOW)
             print(f"GPIO {pin} set to LOW")
 
-        # Keep running
-        while False:
-            time.sleep(1)
+        # Run once then exit
+        time.sleep(2)  # give sensors a moment
+        print("Done — exiting after first reading.")
 
     except KeyboardInterrupt:
         print("Shutting down...")
@@ -90,12 +92,5 @@ def main():
         GPIO.cleanup()
 
 
-
 if __name__ == "__main__":
-
-    main()
-
-
-if __name__ == "__main__":
-
     main()
