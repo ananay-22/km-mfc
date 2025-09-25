@@ -18,9 +18,6 @@ def data_processor(data_queue: queue.Queue):
         try:
             reading = data_queue.get(timeout=1.0)
 
-            # Just print the reading instead of saving
-            print("Sensor reading:", reading.to_dict())
-
             # Stop after first print
             running = False
 
